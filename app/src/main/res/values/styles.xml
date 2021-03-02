@@ -1,0 +1,69 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+
+        <!-- Customize your theme here. -->
+<!--
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+-->
+<!--        <item name="actionBarSize">wrap_content</item>-->
+
+    </style>
+
+    <style name="AppTheme.AppBarOverlay">
+    </style>
+
+    <style name="AppTheme.PopupOverlay">
+    </style>
+
+    <style name="AppTheme.Header" parent = "TextAppearance.AppCompat.Headline">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:visibility">visible</item>
+    </style>
+
+    <style name="AppTheme.Body" parent = "TextAppearance.AppCompat.Body1">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">start</item>
+        <item name="android:maxLines">3</item>
+        <item name="android:visibility">visible</item>
+    </style>
+
+
+    <style name="AppTheme.AuthorEdit" parent = "TextAppearance.AppCompat.Display1">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:inputType">none</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:visibility">visible</item>
+    </style>
+    <style name="AppTheme.ContentEdit" parent = "TextAppearance.AppCompat.Large">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:inputType">none</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:ellipsize">none</item>
+        <item name="android:visibility">visible</item>
+    </style>
+    <style name="OtherButton" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="iconTint">@color/grey</item>
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
+
+
+</resources>

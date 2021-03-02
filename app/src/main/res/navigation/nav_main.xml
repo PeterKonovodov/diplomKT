@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/feedFragment">
+
+    <fragment
+        android:id="@+id/feedFragment"
+        android:name="com.konovodov.diplomkt.activity.FeedFragment"
+        android:label="feed_fragment"
+        tools:layout="@layout/feed_fragment">
+        <action
+            android:id="@+id/action_feedFragment_to_noteViewFragment"
+            app:destination="@id/feedFragmentByAuthor" />
+        <action
+            android:id="@+id/action_feedFragment_to_newQuoteFragment"
+            app:destination="@id/newQuoteFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/feedFragmentByAuthor"
+        android:name="com.konovodov.diplomkt.activity.FeedFragmentByAuthor"
+        android:label="feed_fragment_by_author"
+        tools:layout="@layout/feed_fragment_by_author" >
+        <action
+            android:id="@+id/action_feedFragmentByAuthor_to_newQuoteFragment"
+            app:destination="@id/newQuoteFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newQuoteFragment"
+        android:name="com.konovodov.diplomkt.activity.NewQuoteFragment"
+        android:label="new_quote_fragment"
+        tools:layout="@layout/new_quote_fragment" />
+
+
+
+
+</navigation>
