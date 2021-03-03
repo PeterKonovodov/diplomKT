@@ -7,7 +7,7 @@ import com.konovodov.diplomkt.dto.Quote
 @Entity(tableName = "quotes")
 data class QuoteEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 1,
+    val id: Long = 0,
     val author: String = "",
     val published: Long = 0,
     val content: String = "",

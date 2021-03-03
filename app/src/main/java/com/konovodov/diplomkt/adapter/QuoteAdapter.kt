@@ -1,39 +1,48 @@
 package com.konovodov.diplomkt.adapter
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.konovodov.diplomkt.R
 import com.konovodov.diplomkt.databinding.QuoteInlistLayoutBinding
 import com.konovodov.diplomkt.dto.Quote
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import kotlin.math.abs
 
 
 typealias OnLikeListener = (quote: Quote) -> Unit
 typealias OnDislikeListener = (quote: Quote) -> Unit
 typealias OnShareListener = (quote: Quote) -> Unit
+typealias OnAuthorListener = (quote: Quote) -> Unit
 
 
 class QuoteAdapter(
-    private val onLikeListener: (quote: Quote) -> Unit,
-    private val onDislikeListener: (quote: Quote) -> Unit,
-    private val onShareListener: (quote: Quote) -> Unit
+        private val onLikeListener: (quote: Quote) -> Unit,
+        private val onDislikeListener: (quote: Quote) -> Unit,
+        private val onShareListener: (quote: Quote) -> Unit,
+       private val onAuthorListener: (quote: Quote) -> Unit
 
 ) : ListAdapter<Quote, QuoteViewHolder>(QuoteDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuoteViewHolder {
         val binding =
-            QuoteInlistLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                QuoteInlistLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return QuoteViewHolder(
-            parent,
-            binding,
-            onLikeListener,
-            onDislikeListener,
-            onShareListener
+                parent,
+                binding,
+                onLikeListener,
+                onDislikeListener,
+                onShareListener,
+                onAuthorListener
         )
     }
 
@@ -45,19 +54,26 @@ class QuoteAdapter(
 
 
 class QuoteViewHolder(
-    private val parent: ViewGroup,
-    private val binding: QuoteInlistLayoutBinding,
-    private val onLikeListener: OnLikeListener,
-    private val onDislikeListener: OnDislikeListener,
-    private val onShareListener: OnShareListener
-    ) : RecyclerView.ViewHolder(binding.root) {
+        private val parent: ViewGroup,
+        private val binding: QuoteInlistLayoutBinding,
+        private val onLikeListener: OnLikeListener,
+        private val onDislikeListener: OnDislikeListener,
+        private val onShareListener: OnShareListener,
+        private val onAuthorListener: OnAuthorListener,
+
+        ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(quote: Quote) {
         binding.apply {
 
 
             authorNameText.text = quote.author
-            publishedText.text = LocalDate.ofEpochDay(quote.published)
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+/*
+            publishedText.text = LocalDateTime.ofEpochSecond(quote.published)
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+*/
+            publishedText.text = LocalDateTime.ofEpochSecond(quote.published, 0, ZoneOffset.UTC)
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+
             contentText.text = quote.content
 
             dislikeButton.text = statNumberToString(quote.likes)
@@ -89,11 +105,16 @@ class QuoteViewHolder(
             shareButton.setOnClickListener {
                 onShareListener(quote)
             }
+
+            authorNameText.setOnClickListener{
+                onAuthorListener(quote)
+            }
+
         }
     }
 
     private fun statNumberToString(number: Int): String {
-        return when (number) {
+        return when (abs(number)) {
             in 0..999 -> number.toString()
             in 1000..9999 -> String.format("%1.1fK", number / 100 / 10f)
             in 10000..999999 -> String.format("%dK", number / 1000)

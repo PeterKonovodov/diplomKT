@@ -1,8 +1,10 @@
-![](logo.png)    
+<img src = "logo.png" width = 200px>
     
-# Quotes! v0.1
+# Quotes! v0.2
  
 ## Краткое описание структуры дипломного проекта по курсу "Введение в Android на языке Kotlin"    
+
+Ссылка на задание: https://github.com/netology-code/bkt-diploma/tree/light
 
 Данное приложение основано на одной Activity и компоненте Navigation, который управляет     
 переключеним активных экранов:    

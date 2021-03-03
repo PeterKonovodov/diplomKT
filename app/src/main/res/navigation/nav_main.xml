@@ -11,7 +11,7 @@
         android:label="feed_fragment"
         tools:layout="@layout/feed_fragment">
         <action
-            android:id="@+id/action_feedFragment_to_noteViewFragment"
+            android:id="@+id/action_feedFragment_to_feedFragmentByAuthor"
             app:destination="@id/feedFragmentByAuthor" />
         <action
             android:id="@+id/action_feedFragment_to_newQuoteFragment"

@@ -7,7 +7,7 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper
 @Database(entities = [QuoteEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun noteDao(): QuoteDao
+    abstract fun quoteDao(): QuoteDao
 
     companion object {
         @Volatile

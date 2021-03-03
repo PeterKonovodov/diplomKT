@@ -8,16 +8,18 @@ import com.konovodov.diplomkt.db.QuoteRepositoryRoomImpl
 import com.konovodov.diplomkt.dto.Quote
 
 class QuoteViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: QuoteRepository = QuoteRepositoryRoomImpl(AppDatabase.getInstance(context = application).noteDao())
+    private val repository: QuoteRepository = QuoteRepositoryRoomImpl(AppDatabase.getInstance(context = application).quoteDao())
 
     val data = repository.getList()
+
+    fun getDataByAuthor(author: String) = repository.getListByAuthor(author)
+
     fun likeById(id: Long) = repository.likeById(id)
     fun saveQuote(quote: Quote) = repository.saveQuote(quote)
     fun dislikeById(id: Long) = repository.dislikeById(id)
     fun shareById(id: Long) = repository.shareById(id)
+    fun getEmptyQuote(): Quote = repository.getEmptyQuote()
+    fun getById(id: Long): Quote? = repository.getById(id)
 
-/*
-    fun getById(id: Long): Note? = repository.getById(id)
-    fun getEmptyNote(): Note = repository.getEmptyNote()
-*/
+
 }
