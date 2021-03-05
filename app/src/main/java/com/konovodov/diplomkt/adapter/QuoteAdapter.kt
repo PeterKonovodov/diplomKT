@@ -1,18 +1,17 @@
 package com.konovodov.diplomkt.adapter
 
-import android.os.Bundle
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.konovodov.diplomkt.R
 import com.konovodov.diplomkt.databinding.QuoteInlistLayoutBinding
 import com.konovodov.diplomkt.dto.Quote
-import java.time.LocalDate
+import java.io.FileInputStream
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -29,8 +28,7 @@ class QuoteAdapter(
         private val onLikeListener: (quote: Quote) -> Unit,
         private val onDislikeListener: (quote: Quote) -> Unit,
         private val onShareListener: (quote: Quote) -> Unit,
-       private val onAuthorListener: (quote: Quote) -> Unit
-
+        private val onAuthorListener: (quote: Quote) -> Unit
 ) : ListAdapter<Quote, QuoteViewHolder>(QuoteDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuoteViewHolder {
@@ -82,10 +80,21 @@ class QuoteViewHolder(
 
             if (quote.imagePath.isNotEmpty()) {
                 contentImage.visibility = View.VISIBLE
+
+                val file = parent.context.filesDir.resolve(quote.imagePath)
+                if(file.exists()) {
+                    val dr = BitmapDrawable.createFromPath(quote.imagePath)
+                    imageContent.setImageDrawable(dr)
+
+/*
+                    val options = BitmapFactory.Options()
+                    options.inPreferredConfig = Bitmap.Config.ARGB_8888
+                    val bitmap = BitmapFactory.decodeFile(quote.imagePath, options)
+                    imageContent.setImageBitmap(bitmap)
+*/
+                }
+
             } else contentImage.visibility = View.GONE
-
-
-//            likesButton.isChecked = note.likedByMe
 
 
             toolbar.setOnMenuItemClickListener {

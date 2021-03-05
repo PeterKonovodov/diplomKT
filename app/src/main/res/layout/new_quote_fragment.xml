@@ -10,15 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_margin="5dp"
+        android:layout_margin="16dp"
         card_view:cardBackgroundColor="@color/white"
-        card_view:cardCornerRadius="5dp"
+        card_view:cardCornerRadius="32dp"
         card_view:cardElevation="2dp"
         card_view:cardUseCompatPadding="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="12dp"
             android:layout_weight="6"
             android:orientation="vertical">
 
@@ -28,6 +29,15 @@
                 android:hint="@string/default_author"
                 android:maxLines="2"
                 android:text="" />
+
+            <ImageView
+                android:id="@+id/contentImage"
+                style="@style/AppTheme.ContentEdit"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ok"
+                android:scrollbars="vertical" />
+
 
             <EditText
                 android:id="@+id/contentEdit"
@@ -39,17 +49,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-                <ImageButton
-                    android:id="@+id/undo_button"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:contentDescription="undo"
-                    tools:ignore="HardcodedText"
-                    android:src="@drawable/undo"
-
-                    />
 
                 <ImageButton
                     android:id="@+id/cancel_button"

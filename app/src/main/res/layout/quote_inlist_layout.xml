@@ -85,17 +85,17 @@
     <FrameLayout
         android:id="@+id/contentImage"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="120dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/contentText"
-        android:visibility="visible">
+        android:visibility="gone">
+
         <ImageView
-            android:layout_width="wrap_content"
+            android:id="@+id/imageContent"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/videoThumbnail"
-            android:src="@drawable/video_thumbnail"
             android:layout_gravity="bottom|center"
-            />
+            android:src="@drawable/video_thumbnail" />
     </FrameLayout>
 
     <TextView

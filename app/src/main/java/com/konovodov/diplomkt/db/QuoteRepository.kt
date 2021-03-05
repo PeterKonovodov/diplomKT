@@ -16,7 +16,7 @@ interface QuoteRepository {
     fun dislikeById(id: Long)
     fun shareById(id: Long)
     fun saveQuote(quote: Quote)
-    fun getById(id: Long) : Quote?
+    fun getById(id: Long) : Quote
     fun getEmptyQuote() : Quote
 }
 

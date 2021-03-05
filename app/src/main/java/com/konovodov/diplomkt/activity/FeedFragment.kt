@@ -36,7 +36,8 @@ class FeedFragment : Fragment() {
                                 putString("author", it.author)
                             }
                     )
-                }
+                },
+
         )
 
         binding.newsFeed.adapter = adapter
