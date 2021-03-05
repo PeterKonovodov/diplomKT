@@ -155,7 +155,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="000"
-            style="@style/OtherButton"
+            style="@style/LikeButtons"
             app:icon="@drawable/share_img"
             app:iconStartPadding="4dp"
             app:layout_constraintEnd_toEndOf="parent"

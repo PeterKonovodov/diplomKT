@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.konovodov.diplomkt.databinding.QuoteInlistLayoutBinding
+import com.konovodov.diplomkt.databinding.QuoteLayoutBinding
 import com.konovodov.diplomkt.dto.Quote
 import java.io.FileInputStream
 import java.time.LocalDateTime
@@ -25,22 +25,22 @@ typealias OnAuthorListener = (quote: Quote) -> Unit
 
 
 class QuoteAdapter(
-        private val onLikeListener: (quote: Quote) -> Unit,
-        private val onDislikeListener: (quote: Quote) -> Unit,
-        private val onShareListener: (quote: Quote) -> Unit,
-        private val onAuthorListener: (quote: Quote) -> Unit
+    private val onLikeListener: (quote: Quote) -> Unit,
+    private val onDislikeListener: (quote: Quote) -> Unit,
+    private val onShareListener: (quote: Quote) -> Unit,
+    private val onAuthorListener: (quote: Quote) -> Unit
 ) : ListAdapter<Quote, QuoteViewHolder>(QuoteDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuoteViewHolder {
         val binding =
-                QuoteInlistLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            QuoteLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return QuoteViewHolder(
-                parent,
-                binding,
-                onLikeListener,
-                onDislikeListener,
-                onShareListener,
-                onAuthorListener
+            parent,
+            binding,
+            onLikeListener,
+            onDislikeListener,
+            onShareListener,
+            onAuthorListener
         )
     }
 
@@ -52,49 +52,37 @@ class QuoteAdapter(
 
 
 class QuoteViewHolder(
-        private val parent: ViewGroup,
-        private val binding: QuoteInlistLayoutBinding,
-        private val onLikeListener: OnLikeListener,
-        private val onDislikeListener: OnDislikeListener,
-        private val onShareListener: OnShareListener,
-        private val onAuthorListener: OnAuthorListener,
+    private val parent: ViewGroup,
+    private val binding: QuoteLayoutBinding,
+    private val onLikeListener: OnLikeListener,
+    private val onDislikeListener: OnDislikeListener,
+    private val onShareListener: OnShareListener,
+    private val onAuthorListener: OnAuthorListener,
 
-        ) : RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(quote: Quote) {
         binding.apply {
 
 
             authorNameText.text = quote.author
-/*
-            publishedText.text = LocalDateTime.ofEpochSecond(quote.published)
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-*/
+
+            if (quote.fromAuthor.isNotEmpty())
+                authorNameText.text = (quote.author + " (сплагиатил у " + quote.fromAuthor + ")")
+            else authorNameText.text = quote.author
+
             publishedText.text = LocalDateTime.ofEpochSecond(quote.published, 0, ZoneOffset.UTC)
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
 
             contentText.text = quote.content
 
-            dislikeButton.text = statNumberToString(quote.likes)
+            likesText.text = statNumberToString(quote.likes)
             linkText.text = quote.link
 
 
-            if (quote.imagePath.isNotEmpty()) {
+            quote.imageDrawable?.let {
                 contentImage.visibility = View.VISIBLE
-
-                val file = parent.context.filesDir.resolve(quote.imagePath)
-                if(file.exists()) {
-                    val dr = BitmapDrawable.createFromPath(quote.imagePath)
-                    imageContent.setImageDrawable(dr)
-
-/*
-                    val options = BitmapFactory.Options()
-                    options.inPreferredConfig = Bitmap.Config.ARGB_8888
-                    val bitmap = BitmapFactory.decodeFile(quote.imagePath, options)
-                    imageContent.setImageBitmap(bitmap)
-*/
-                }
-
-            } else contentImage.visibility = View.GONE
+                imageContent.setImageDrawable(it)
+            } ?: run { contentImage.visibility = View.GONE }
 
 
             toolbar.setOnMenuItemClickListener {
@@ -115,7 +103,7 @@ class QuoteViewHolder(
                 onShareListener(quote)
             }
 
-            authorNameText.setOnClickListener{
+            authorNameText.setOnClickListener {
                 onAuthorListener(quote)
             }
 

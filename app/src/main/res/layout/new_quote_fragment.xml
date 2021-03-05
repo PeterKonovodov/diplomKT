@@ -23,9 +23,9 @@
             android:layout_weight="6"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/authorEdit"
-                style="@style/AppTheme.AuthorEdit"
+            <TextView
+                android:id="@+id/authorText"
+                style="@style/AppTheme.AuthorText"
                 android:hint="@string/default_author"
                 android:maxLines="2"
                 android:text="" />

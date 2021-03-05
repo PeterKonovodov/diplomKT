@@ -30,7 +30,7 @@ class FeedFragmentByAuthor : Fragment() {
         val adapter = QuoteAdapter(
                 onLikeListener = { viewModel.likeById(it.id) },
                 onDislikeListener = { viewModel.dislikeById(it.id) },
-                onShareListener = { viewModel.shareById(it.id) },
+                onShareListener = { viewModel.shareQuote(it) },
                 onAuthorListener = {}
         )
 

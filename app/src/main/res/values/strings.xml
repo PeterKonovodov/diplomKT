@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">DiplomKT</string>
     <string name="default_author">Author</string>
+    <string name="user_name">User</string>
     <string name="default_content">Like Sirius B, Procyon B is a white dwarf that was inferred from astrometric data long before it was observed.</string>
+
 </resources>

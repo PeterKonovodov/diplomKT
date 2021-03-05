@@ -28,7 +28,7 @@ class FeedFragment : Fragment() {
         val adapter = QuoteAdapter(
                 onLikeListener = { viewModel.likeById(it.id) },
                 onDislikeListener = { viewModel.dislikeById(it.id) },
-                onShareListener = { viewModel.shareById(it.id) },
+                onShareListener = { viewModel.shareQuote(it) },
                 onAuthorListener = {
                     activity?.findNavController(R.id.nav_host_fragment)?.navigate(
                             R.id.action_feedFragment_to_feedFragmentByAuthor,

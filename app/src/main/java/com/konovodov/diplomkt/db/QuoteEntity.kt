@@ -9,6 +9,7 @@ data class QuoteEntity(
         @PrimaryKey(autoGenerate = true)
         val id: Long = 0,
         val author: String = "",
+        val fromAuthor: String = "",
         val published: Long = 0,
         val content: String = "",
         val link: String = "",
@@ -18,6 +19,7 @@ data class QuoteEntity(
     fun toDto() = Quote(
             this.id,
             this.author,
+            this.fromAuthor,
             this.published,
             this.content,
             this.link,
@@ -30,6 +32,7 @@ data class QuoteEntity(
                 QuoteEntity(
                         dto.id,
                         dto.author,
+                        dto.fromAuthor,
                         dto.published,
                         dto.content,
                         dto.link,
