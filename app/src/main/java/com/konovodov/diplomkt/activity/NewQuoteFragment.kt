@@ -34,9 +34,9 @@ class NewQuoteFragment : Fragment() {
 
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
 
         savedInstanceState?.let {
@@ -71,15 +71,23 @@ class NewQuoteFragment : Fragment() {
                             }
 
                             if (activity?.packageManager?.let { it1 ->
-                                        photoPickerIntent.resolveActivity(it1)
-                                    } != null) startActivityForResult(photoPickerIntent, GALLERY_REQUEST)
+                                    photoPickerIntent.resolveActivity(it1)
+                                } != null) startActivityForResult(
+                                photoPickerIntent,
+                                GALLERY_REQUEST
+                            )
                         }
+
                         cancelButton.setOnClickListener {
                             findNavController().popBackStack()
                         }
                         saveButton.setOnClickListener {
-                            if(contentEdit.text.isNotEmpty()) {
-                                quote = quote.copy(author = authorText.text.toString(), content = contentEdit.text.toString())
+                            if (contentEdit.text.isNotEmpty()) {
+                                quote = quote.copy(
+                                    author = authorText.text.toString(),
+                                    content = contentEdit.text.toString(),
+                                    link = linkEdit.text.toString()
+                                )
                                 viewModel.saveQuote(quote)
                                 AndroidUtils.hideKeyboard(requireView())
                                 findNavController().popBackStack()
@@ -111,12 +119,14 @@ class NewQuoteFragment : Fragment() {
                             selectedImageUri = imageUri
                             if (Build.VERSION.SDK_INT < 28) {
                                 val bm = MediaStore.Images.Media.getBitmap(
-                                        activity?.contentResolver, imageUri)
+                                    activity?.contentResolver, imageUri
+                                )
                                 val drawable = BitmapDrawable(activity?.resources, bm)
                                 contentImage.setImageDrawable(drawable)
                                 quote = quote.copy(imageDrawable = drawable)
                             } else {
-                                val source = ImageDecoder.createSource(activity?.contentResolver!!, imageUri)
+                                val source =
+                                    ImageDecoder.createSource(activity?.contentResolver!!, imageUri)
                                 val drawable = ImageDecoder.decodeDrawable(source)
                                 contentImage.setImageDrawable(drawable)
                                 quote = quote.copy(imageDrawable = drawable)

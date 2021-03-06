@@ -19,38 +19,38 @@ class FeedFragment : Fragment() {
     val viewModel: QuoteViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val binding = FeedFragmentBinding.inflate(inflater, container, false)
 
         val adapter = QuoteAdapter(
-                onLikeListener = { viewModel.likeById(it.id) },
-                onDislikeListener = { viewModel.dislikeById(it.id) },
-                onShareListener = { viewModel.shareQuote(it) },
-                onAuthorListener = {
-                    activity?.findNavController(R.id.nav_host_fragment)?.navigate(
-                            R.id.action_feedFragment_to_feedFragmentByAuthor,
-                            Bundle().apply {
-                                putString("author", it.author)
-                            }
-                    )
-                },
+            onLikeListener = { viewModel.likeById(it.id) },
+            onDislikeListener = { viewModel.dislikeById(it.id) },
+            onShareListener = { viewModel.shareQuote(it) },
+            onAuthorListener = {
+                activity?.findNavController(R.id.nav_host_fragment)?.navigate(
+                    R.id.action_feedFragment_to_feedFragmentByAuthor,
+                    Bundle().apply {
+                        putString("author", it.author)
+                    }
+                )
+            },
 
-        )
+            )
 
         binding.newsFeed.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner, { quotesList -> adapter.submitList(quotesList) })
 
         binding.fab.setOnClickListener {
             activity?.findNavController(R.id.nav_host_fragment)?.navigate(
-                    R.id.action_feedFragment_to_newQuoteFragment,
-                    Bundle().apply {
-                        putLong("id", 0)
-                        putString("author", "")
-                        putString("content", "")
-                    }
+                R.id.action_feedFragment_to_newQuoteFragment,
+                Bundle().apply {
+                    putLong("id", 0)
+                    putString("author", "")
+                    putString("content", "")
+                }
             )
         }
 

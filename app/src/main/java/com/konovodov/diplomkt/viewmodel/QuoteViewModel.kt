@@ -8,7 +8,10 @@ import com.konovodov.diplomkt.db.QuoteRepositoryRoomImpl
 import com.konovodov.diplomkt.dto.Quote
 
 class QuoteViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: QuoteRepository = QuoteRepositoryRoomImpl(AppDatabase.getInstance(context = application).quoteDao(), application)
+    private val repository: QuoteRepository = QuoteRepositoryRoomImpl(
+        AppDatabase.getInstance(context = application).quoteDao(),
+        application
+    )
 
     val data = repository.getAll()
 

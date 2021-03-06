@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_margin="16dp"
+        android:layout_margin="4dp"
         card_view:cardBackgroundColor="@color/white"
-        card_view:cardCornerRadius="32dp"
+        card_view:cardCornerRadius="12dp"
         card_view:cardElevation="2dp"
         card_view:cardUseCompatPadding="true">
 
@@ -26,17 +26,17 @@
             <TextView
                 android:id="@+id/authorText"
                 style="@style/AppTheme.AuthorText"
-                android:hint="@string/default_author"
+                android:hint="@string/user_name"
                 android:maxLines="2"
                 android:text="" />
 
             <ImageView
                 android:id="@+id/contentImage"
                 style="@style/AppTheme.ContentEdit"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/ok"
-                android:scrollbars="vertical" />
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:scrollbars="vertical"
+                android:src="@drawable/image_select" />
 
 
             <EditText
@@ -45,6 +45,18 @@
                 android:hint="@string/default_content"
                 android:maxLines="6"
                 android:scrollbars="vertical" />
+
+            <EditText
+                android:id="@+id/linkEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:autoLink="web"
+                android:ellipsize="end"
+                android:hint="@string/default_url"
+                android:text="" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,10 +67,9 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:src="@drawable/cancel"
                     android:contentDescription="cancel"
-                    tools:ignore="HardcodedText"
-                    />
+                    android:src="@drawable/cancel"
+                    tools:ignore="HardcodedText" />
 
 
                 <ImageButton
@@ -66,10 +77,9 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ok"
                     android:contentDescription="ok"
-                    tools:ignore="HardcodedText"
-                    />
+                    android:src="@drawable/ok"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 

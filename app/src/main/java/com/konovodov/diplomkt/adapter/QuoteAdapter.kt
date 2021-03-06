@@ -1,8 +1,10 @@
 package com.konovodov.diplomkt.adapter
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,13 +78,16 @@ class QuoteViewHolder(
             contentText.text = quote.content
 
             likesText.text = statNumberToString(quote.likes)
-            linkText.text = quote.link
+            if (quote.link.isNotEmpty()) {
+                linkText.text = quote.link
+                linkText.visibility = View.VISIBLE
+            } else linkText.visibility = View.GONE
 
 
             quote.imageDrawable?.let {
-                contentImage.visibility = View.VISIBLE
+                imageContent.visibility = View.VISIBLE
                 imageContent.setImageDrawable(it)
-            } ?: run { contentImage.visibility = View.GONE }
+            } ?: run { imageContent.visibility = View.GONE }
 
 
             toolbar.setOnMenuItemClickListener {
@@ -105,6 +110,12 @@ class QuoteViewHolder(
 
             authorNameText.setOnClickListener {
                 onAuthorListener(quote)
+            }
+            linkText.setOnClickListener {
+                Intent().apply {
+                    action = Intent.ACTION_VIEW
+                    data = Uri.parse(linkText.toString())
+                }
             }
 
         }
