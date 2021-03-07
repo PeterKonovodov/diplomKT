@@ -29,15 +29,15 @@ data class QuoteEntity(
 
     companion object {
         fun fromDto(dto: Quote) =
-                QuoteEntity(
-                        dto.id,
-                        dto.author,
-                        dto.fromAuthor,
-                        dto.published,
-                        dto.content,
-                        dto.link,
-                        dto.likes,
-                        dto.imagePath
-                )
+            QuoteEntity(
+                    dto.id,
+                    dto.author,
+                    dto.fromAuthor,
+                    dto.published,
+                    dto.content,
+                    dto.link,
+                    dto.likes,
+                    dto.imagePath
+            )
     }
 }

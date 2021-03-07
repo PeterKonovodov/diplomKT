@@ -75,7 +75,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
     }
 
     override fun shareQuote(quote: Quote) {
-        if(quote.author == context.resources.getString(R.string.user_name)) return //у себя не плагиатим
+        if (quote.author == context.resources.getString(R.string.user_name)) return //у себя не плагиатим
 
         if (quote.fromAuthor.isEmpty()) {        //плагиатим оригинал
             saveQuote(

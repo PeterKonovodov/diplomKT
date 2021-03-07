@@ -11,8 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/quote_layout"
-        />
+        tools:listitem="@layout/quote_layout" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -22,11 +21,9 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:backgroundTint="@color/fab_color"
-        tools:ignore="HardcodedText"
         android:contentDescription="FAB"
         android:foreground="@android:drawable/ic_menu_add"
-        />
-
+        tools:ignore="HardcodedText" />
 
 
 </FrameLayout>

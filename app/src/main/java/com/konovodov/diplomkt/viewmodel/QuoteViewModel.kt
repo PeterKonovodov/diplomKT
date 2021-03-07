@@ -26,5 +26,4 @@ class QuoteViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteById(id: Long) = repository.deleteById(id)
 
 
-
 }

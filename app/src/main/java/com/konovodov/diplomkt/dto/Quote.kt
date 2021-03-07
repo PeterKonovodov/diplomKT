@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
-data class Quote (
+data class Quote(
         val id: Long = 0,
         val author: String = "",
         val fromAuthor: String = "",

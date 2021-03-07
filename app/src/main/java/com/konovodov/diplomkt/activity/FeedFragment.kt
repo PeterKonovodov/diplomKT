@@ -86,23 +86,4 @@ class FeedFragment : Fragment() {
         return binding.root
     }
 
-
-/*
-
-    override fun onBackPressed() {
-        timeout = System.currentTimeMillis() - timeout
-        if (timeout > 3000) backPressedCount = 0
-        backPressedCount++
-        if (backPressedCount == 1) {
-            Toast.makeText(
-                this@NotesMainActivity, getString(R.string.backpress_more),
-                Toast.LENGTH_SHORT
-            ).show()
-            timeout = System.currentTimeMillis() //засекаем отсчет времени после первого
-            // нажатия
-        }
-        if (backPressedCount == 2) super.onBackPressed()
-    }
-*/
-
 }

@@ -66,17 +66,6 @@ class QuoteViewHolder(
     fun bind(quote: Quote) {
         binding.apply {
 
-/*
-            val radius: Float = parent.resources.getDimension(R.dimen.default_corner_radius)
-            val materialShapeDrawable = toolbar.background as MaterialShapeDrawable
-            materialShapeDrawable.shapeAppearanceModel = materialShapeDrawable.shapeAppearanceModel
-                .toBuilder()
-                .setAllCorners(CornerFamily.ROUNDED, radius)
-                .build()
-*/
-
-
-
             authorNameText.text = quote.author
 
             if (quote.fromAuthor.isNotEmpty())
@@ -156,7 +145,7 @@ class QuoteDiffCallback : DiffUtil.ItemCallback<Quote>() {
     }
 
     override fun areContentsTheSame(oldItem: Quote, newItem: Quote): Boolean {
-        return oldItem == newItem
+        return oldItem.likes == newItem.likes
     }
 }
 
