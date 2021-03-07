@@ -4,14 +4,11 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.net.Uri
-import android.os.Environment
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.konovodov.diplomkt.R
 import com.konovodov.diplomkt.dto.Quote
-import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
@@ -73,6 +70,10 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
         dao.dislikeById(id)
     }
 
+    override fun deleteById(id: Long) {
+        dao.deleteById(id)
+    }
+
     override fun shareQuote(quote: Quote) {
         if(quote.author == context.resources.getString(R.string.user_name)) return //у себя не плагиатим
 
@@ -130,7 +131,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
 
 
     fun hardCodeData() {
-        var random: Random = Random(1)
+        val random = Random(1)
 
         saveQuote(
             Quote(
@@ -175,7 +176,8 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Не люблю тусоваться! Просто у меня шило в жопе, которого я не просил!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.bender2)
+                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.bender2),
+                link = "https://ru.wikipedia.org/wiki/Шило"
             )
         )
         saveQuote(
@@ -262,7 +264,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
         saveQuote(
             Quote(
                 author = "Фрай",
-                content = "Почему йогурт в кепке? Я могу все объяснить. Он раньше был молоком, но понимаете — время калечит всех…",
+                content = "Почему в кепке йогурт? Я могу все объяснить. Он раньше был молоком, но понимаете — время калечит всех…",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
                 imageDrawable = AppCompatResources.getDrawable(context, R.drawable.fry2)
@@ -283,7 +285,8 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Хорошие новости, народ: по телевизору показывают плохие новости!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.farnsworth2)
+                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.farnsworth2),
+                link = "https://yandex.ru/news/"
             )
         )
         saveQuote(
@@ -298,7 +301,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
         saveQuote(
             Quote(
                 author = "Фарнсворт",
-                content = "Да это же обычная вода….обычная вода с небольшой примесью ЛСД.",
+                content = "Да это же обычная вода… Обычная вода с небольшой примесью ЛСД.",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
                 imageDrawable = AppCompatResources.getDrawable(context, R.drawable.farnsworth2)
@@ -307,7 +310,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
         saveQuote(
             Quote(
                 author = "Бранниган",
-                content = "Пока я командую, любая миссия суицидальная!",
+                content = "Пока я командую, любая миссия - суицидальная!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
                 imageDrawable = AppCompatResources.getDrawable(context, R.drawable.brannigan)
@@ -325,7 +328,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
         saveQuote(
             Quote(
                 author = "Бранниган",
-                content = "Я получил ваш вызов о помощи и прибыл, как только захотел.",
+                content = "Я получил ваш вызов о помощи и прибыл, как только захотел!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
                 imageDrawable = AppCompatResources.getDrawable(context, R.drawable.brannigan)

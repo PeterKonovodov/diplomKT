@@ -1,12 +1,7 @@
 package com.konovodov.diplomkt.db
 
-import android.content.Context
-import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.room.Query
 import com.konovodov.diplomkt.dto.Quote
-import java.time.LocalDate
 
 
 interface QuoteRepository {
@@ -17,6 +12,7 @@ interface QuoteRepository {
     fun shareQuote(quote: Quote)
     fun saveQuote(quote: Quote)
     fun getById(id: Long) : Quote
+    fun deleteById(id: Long)
     fun getEmptyQuote() : Quote
 }
 

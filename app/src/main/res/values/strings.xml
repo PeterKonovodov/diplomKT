@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">DiplomKT</string>
-    <string name="default_author">Author</string>
+    <string name="app_name">DEMO-tivation!</string>
     <string name="user_name">User</string>
     <string name="default_content">Enter your message here.</string>
     <string name="default_url">http://www…?</string>
+    <string name="backpress_more">To exit press BACK once more!</string>
+    <string name="delete_quote">Delete</string>
 
 </resources>

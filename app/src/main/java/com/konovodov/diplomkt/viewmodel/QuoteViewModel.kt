@@ -22,8 +22,9 @@ class QuoteViewModel(application: Application) : AndroidViewModel(application) {
     fun likeById(id: Long) = repository.likeById(id)
     fun saveQuote(quote: Quote) = repository.saveQuote(quote)
     fun dislikeById(id: Long) = repository.dislikeById(id)
-    fun getEmptyQuote(): Quote = repository.getEmptyQuote()
     fun getById(id: Long): Quote = repository.getById(id)
+    fun deleteById(id: Long) = repository.deleteById(id)
+
 
 
 }

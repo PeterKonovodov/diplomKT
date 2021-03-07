@@ -25,7 +25,7 @@ import java.io.IOException
 
 class NewQuoteFragment : Fragment() {
 
-    val GALLERY_REQUEST = 1
+    private val GALLERYREQUEST = 1
 
     val viewModel: QuoteViewModel by viewModels(ownerProducer = ::requireParentFragment)
     lateinit var quote: Quote
@@ -58,7 +58,7 @@ class NewQuoteFragment : Fragment() {
 
                 it.getString("author")?.let { author ->
 
-                    authorText.text = context?.resources?.getString(R.string.user_name)
+                    authorTextEdit.text = context?.resources?.getString(R.string.user_name)
 
                     data.getString("content")?.let { content ->
                         contentEdit.setText(content)
@@ -74,17 +74,18 @@ class NewQuoteFragment : Fragment() {
                                     photoPickerIntent.resolveActivity(it1)
                                 } != null) startActivityForResult(
                                 photoPickerIntent,
-                                GALLERY_REQUEST
+                                GALLERYREQUEST
                             )
                         }
 
                         cancelButton.setOnClickListener {
+                            AndroidUtils.hideKeyboard(requireView())
                             findNavController().popBackStack()
                         }
                         saveButton.setOnClickListener {
                             if (contentEdit.text.isNotEmpty()) {
                                 quote = quote.copy(
-                                    author = authorText.text.toString(),
+                                    author = authorTextEdit.text.toString(),
                                     content = contentEdit.text.toString(),
                                     link = linkEdit.text.toString()
                                 )
@@ -112,24 +113,24 @@ class NewQuoteFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, returnedIntent: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                GALLERY_REQUEST -> run {
+                GALLERYREQUEST -> run {
                     val imageUri = returnedIntent?.data
                     try {
                         imageUri?.let {
                             selectedImageUri = imageUri
-                            if (Build.VERSION.SDK_INT < 28) {
+                            quote = if (Build.VERSION.SDK_INT < 28) {
                                 val bm = MediaStore.Images.Media.getBitmap(
                                     activity?.contentResolver, imageUri
                                 )
                                 val drawable = BitmapDrawable(activity?.resources, bm)
                                 contentImage.setImageDrawable(drawable)
-                                quote = quote.copy(imageDrawable = drawable)
+                                quote.copy(imageDrawable = drawable)
                             } else {
                                 val source =
                                     ImageDecoder.createSource(activity?.contentResolver!!, imageUri)
                                 val drawable = ImageDecoder.decodeDrawable(source)
                                 contentImage.setImageDrawable(drawable)
-                                quote = quote.copy(imageDrawable = drawable)
+                                quote.copy(imageDrawable = drawable)
                             }
                         }
                     } catch (e: IOException) {

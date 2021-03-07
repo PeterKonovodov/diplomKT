@@ -2,7 +2,6 @@ package com.konovodov.diplomkt.db
 
 import android.content.Context
 import androidx.room.*
-import androidx.sqlite.db.SupportSQLiteOpenHelper
 
 @Database(entities = [QuoteEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {

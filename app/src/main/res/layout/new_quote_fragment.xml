@@ -19,29 +19,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="12dp"
+            android:layout_margin="4dp"
             android:layout_weight="6"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/authorText"
-                style="@style/AppTheme.AuthorText"
-                android:hint="@string/user_name"
+                android:id="@+id/authorTextEdit"
+                style="@style/AuthorText"
                 android:maxLines="2"
-                android:text="" />
+                android:text="@string/user_name" />
 
             <ImageView
                 android:id="@+id/contentImage"
-                style="@style/AppTheme.ContentEdit"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
+                android:layout_gravity="center"
                 android:scrollbars="vertical"
                 android:src="@drawable/image_select" />
 
 
             <EditText
                 android:id="@+id/contentEdit"
-                style="@style/AppTheme.ContentEdit"
+                style="@style/CardMessageText"
                 android:hint="@string/default_content"
                 android:maxLines="6"
                 android:scrollbars="vertical" />
@@ -52,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
+                style="@style/CardMessageText"
                 android:autoLink="web"
                 android:ellipsize="end"
                 android:hint="@string/default_url"

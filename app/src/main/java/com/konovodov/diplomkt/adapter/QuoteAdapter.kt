@@ -1,9 +1,6 @@
 package com.konovodov.diplomkt.adapter
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.konovodov.diplomkt.R
 import com.konovodov.diplomkt.databinding.QuoteLayoutBinding
 import com.konovodov.diplomkt.dto.Quote
-import java.io.FileInputStream
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -24,13 +21,15 @@ typealias OnLikeListener = (quote: Quote) -> Unit
 typealias OnDislikeListener = (quote: Quote) -> Unit
 typealias OnShareListener = (quote: Quote) -> Unit
 typealias OnAuthorListener = (quote: Quote) -> Unit
+typealias OnDeleteListener = (quote: Quote) -> Unit
 
 
 class QuoteAdapter(
     private val onLikeListener: (quote: Quote) -> Unit,
     private val onDislikeListener: (quote: Quote) -> Unit,
     private val onShareListener: (quote: Quote) -> Unit,
-    private val onAuthorListener: (quote: Quote) -> Unit
+    private val onAuthorListener: (quote: Quote) -> Unit,
+    private val onDeleteListener: (quote: Quote) -> Unit
 ) : ListAdapter<Quote, QuoteViewHolder>(QuoteDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuoteViewHolder {
@@ -42,7 +41,8 @@ class QuoteAdapter(
             onLikeListener,
             onDislikeListener,
             onShareListener,
-            onAuthorListener
+            onAuthorListener,
+            onDeleteListener
         )
     }
 
@@ -60,10 +60,21 @@ class QuoteViewHolder(
     private val onDislikeListener: OnDislikeListener,
     private val onShareListener: OnShareListener,
     private val onAuthorListener: OnAuthorListener,
+    private val onDeleteListener: OnDeleteListener,
 
     ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(quote: Quote) {
         binding.apply {
+
+/*
+            val radius: Float = parent.resources.getDimension(R.dimen.default_corner_radius)
+            val materialShapeDrawable = toolbar.background as MaterialShapeDrawable
+            materialShapeDrawable.shapeAppearanceModel = materialShapeDrawable.shapeAppearanceModel
+                .toBuilder()
+                .setAllCorners(CornerFamily.ROUNDED, radius)
+                .build()
+*/
+
 
 
             authorNameText.text = quote.author
@@ -73,7 +84,7 @@ class QuoteViewHolder(
             else authorNameText.text = quote.author
 
             publishedText.text = LocalDateTime.ofEpochSecond(quote.published, 0, ZoneOffset.UTC)
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                .format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"))
 
             contentText.text = quote.content
 
@@ -90,12 +101,19 @@ class QuoteViewHolder(
             } ?: run { imageContent.visibility = View.GONE }
 
 
-            toolbar.setOnMenuItemClickListener {
-                when (it.itemId) {
-//                    R.id.action_delete_note -> onDeleteListener(quote)
-//                    R.id.action_edit_note -> onEditListener(quote)
+            if (quote.author == parent.resources.getString(R.string.user_name)) {
+                toolbar.menu.findItem(R.id.action_delete_quote).isVisible = true
+                toolbar.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.action_delete_quote -> onDeleteListener(quote)
+                    }
+                    true
                 }
-                true
+            } else {
+                toolbar.menu.findItem(R.id.action_delete_quote).isVisible = false
+                toolbar.setOnMenuItemClickListener {
+                    true
+                }
             }
 
             likeButton.setOnClickListener {

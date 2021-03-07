@@ -12,10 +12,12 @@
         tools:layout="@layout/feed_fragment">
         <action
             android:id="@+id/action_feedFragment_to_feedFragmentByAuthor"
-            app:destination="@id/feedFragmentByAuthor" />
+            app:destination="@id/feedFragmentByAuthor"
+            />
         <action
             android:id="@+id/action_feedFragment_to_newQuoteFragment"
-            app:destination="@id/newQuoteFragment" />
+            app:destination="@id/newQuoteFragment"
+            />
     </fragment>
 
     <fragment

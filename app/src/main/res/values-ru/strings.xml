@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">DEMO-tivation!</string>
+    <string name="user_name">User</string>
+    <string name="default_content">Введите текст в этом поле.</string>
+    <string name="default_url">http://www…?</string>
+    <string name="backpress_more">Для выхода нажмите BACK еще раз!</string>
+    <string name="delete_quote">Удалить</string>
+
+</resources>
