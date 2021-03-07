@@ -11,6 +11,7 @@ import com.konovodov.diplomkt.R
 import com.konovodov.diplomkt.dto.Quote
 import java.io.FileOutputStream
 import java.util.*
+import kotlin.collections.HashMap
 
 
 class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Context) :
@@ -19,13 +20,13 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
     lateinit var listFromDb: LiveData<List<QuoteEntity>>
     lateinit var quotesList: LiveData<List<Quote>>
 
+    val imagesCache = HashMap<Long, Drawable>()
+
     override fun getAll(): LiveData<List<Quote>> {
 
         if (dao.getSize() == 0) hardCodeData()
 
-        listFromDb = dao.getAll()
-
-        quotesList = Transformations.map(listFromDb) { list ->
+        quotesList = Transformations.map(dao.getAll()) { list ->
             list.map {
                 Quote(
                     it.id,
@@ -36,7 +37,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                     it.link,
                     it.likes,
                     it.imagePath,
-                    imageDrawable = if (it.imagePath.isNotEmpty()) BitmapDrawable.createFromPath(it.imagePath) else null
+                    imageDrawable = getImageById(it.id)
                 )
             }
         }
@@ -56,11 +57,20 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                     it.link,
                     it.likes,
                     it.imagePath,
-                    imageDrawable = if (it.imagePath.isNotEmpty()) BitmapDrawable.createFromPath(it.imagePath) else null
+                    imageDrawable = getImageById(it.id)
                 )
             }
         }
 
+
+    override fun getImageById(id: Long): Drawable? {
+        if(imagesCache.contains(id)) return imagesCache[id]
+        val quote = dao.getById(id)
+        if(quote.imagePath.isEmpty()) return null
+        val drawable = BitmapDrawable.createFromPath(quote.imagePath)
+        drawable?.let { imagesCache.put(id, it) }
+        return drawable
+    }
 
     override fun likeById(id: Long) {
         dao.likeById(id)
@@ -72,6 +82,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
 
     override fun deleteById(id: Long) {
         dao.deleteById(id)
+        imagesCache.remove(id)
     }
 
     override fun shareQuote(quote: Quote) {
