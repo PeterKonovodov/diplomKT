@@ -56,7 +56,8 @@ class NewQuoteFragment : Fragment() {
                     contentImage.setImageDrawable(BitmapDrawable(bitmap))
                 }
 
-                it.getString("author")?.let { author ->
+                //исправить эту проверку
+                it.getString("author")?.let {
 
                     authorTextEdit.text = context?.resources?.getString(R.string.user_name)
 

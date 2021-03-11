@@ -3,6 +3,8 @@ package com.konovodov.diplomkt.viewmodel
 import android.app.Application
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import com.konovodov.diplomkt.db.AppDatabase
 import com.konovodov.diplomkt.db.QuoteRepository
 import com.konovodov.diplomkt.db.QuoteRepositoryRoomImpl
@@ -14,9 +16,8 @@ class QuoteViewModel(application: Application) : AndroidViewModel(application) {
         application
     )
 
-    val data = repository.getAll()
-
-    fun getDataByAuthor(author: String) = repository.getAllByAuthor(author)
+    val quotesList = repository.getAllPaged(PAGE_SIZE)
+    fun getAllByAuthorPaged(author: String) = repository.getAllByAuthorPaged(PAGE_SIZE, author)
 
     fun shareQuote(quote: Quote) = repository.shareQuote(quote)
 
@@ -26,6 +27,10 @@ class QuoteViewModel(application: Application) : AndroidViewModel(application) {
     fun getById(id: Long): Quote = repository.getById(id)
     fun deleteById(id: Long) = repository.deleteById(id)
     fun getImageById(id: Long) : Drawable? = repository.getImageById(id)
+
+    companion object {
+        private const val PAGE_SIZE = 5
+    }
 
 
 }

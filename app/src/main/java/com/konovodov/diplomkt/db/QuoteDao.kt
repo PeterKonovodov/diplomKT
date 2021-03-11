@@ -1,16 +1,18 @@
 package com.konovodov.diplomkt.db
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
+import androidx.paging.PagedList
 import androidx.room.*
 
 @Dao
 interface QuoteDao {
 
     @Query("SELECT * FROM quotes ORDER BY likes DESC")
-    fun getAll(): LiveData<List<QuoteEntity>>
+    fun getAllPaged(): DataSource.Factory<Int, QuoteEntity>
 
     @Query("SELECT * FROM quotes WHERE author = :author ORDER BY likes DESC")
-    fun getByAuthor(author: String): LiveData<List<QuoteEntity>>
+    fun getAllByAuthorPaged(author: String): DataSource.Factory<Int, QuoteEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(quote: QuoteEntity)

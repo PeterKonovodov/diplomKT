@@ -5,11 +5,13 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.konovodov.diplomkt.R
 import com.konovodov.diplomkt.databinding.QuoteLayoutBinding
+import com.konovodov.diplomkt.db.QuoteEntity
 import com.konovodov.diplomkt.dto.Quote
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -30,7 +32,7 @@ class QuoteAdapter(
     private val onShareListener: (quote: Quote) -> Unit,
     private val onAuthorListener: (quote: Quote) -> Unit,
     private val onDeleteListener: (quote: Quote) -> Unit
-) : ListAdapter<Quote, QuoteViewHolder>(QuoteDiffCallback()) {
+) : PagedListAdapter<QuoteEntity, QuoteViewHolder>(QUOTE_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuoteViewHolder {
         val binding =
@@ -46,11 +48,28 @@ class QuoteAdapter(
         )
     }
 
+
+
     override fun onBindViewHolder(holder: QuoteViewHolder, position: Int) {
         val quote = getItem(position)
-        holder.bind(quote)
+        quote?.let{holder.bind(it)}
     }
+
+    companion object {
+        private val QUOTE_COMPARATOR = object : DiffUtil.ItemCallback<QuoteEntity>() {
+            override fun areItemsTheSame(oldItem: QuoteEntity, newItem: QuoteEntity): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: QuoteEntity, newItem: QuoteEntity): Boolean {
+                return oldItem.likes == newItem.likes
+            }
+        }
+    }
+
+
 }
+
 
 
 class QuoteViewHolder(
@@ -63,7 +82,8 @@ class QuoteViewHolder(
     private val onDeleteListener: OnDeleteListener,
 
     ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(quote: Quote) {
+
+    fun bind(quote: QuoteEntity) {
         binding.apply {
 
             authorNameText.text = quote.author
@@ -84,17 +104,19 @@ class QuoteViewHolder(
             } else linkText.visibility = View.GONE
 
 
+/*
             quote.imageDrawable?.let {
                 imageContent.visibility = View.VISIBLE
                 imageContent.setImageDrawable(it)
             } ?: run { imageContent.visibility = View.GONE }
+*/
 
 
             if (quote.author == parent.resources.getString(R.string.user_name)) {
                 toolbar.menu.findItem(R.id.action_delete_quote).isVisible = true
                 toolbar.setOnMenuItemClickListener {
                     when (it.itemId) {
-                        R.id.action_delete_quote -> onDeleteListener(quote)
+                        R.id.action_delete_quote -> onDeleteListener(quote.toDto())
                     }
                     true
                 }
@@ -106,17 +128,17 @@ class QuoteViewHolder(
             }
 
             likeButton.setOnClickListener {
-                onLikeListener(quote)
+                onLikeListener(quote.toDto())
             }
             dislikeButton.setOnClickListener {
-                onDislikeListener(quote)
+                onDislikeListener(quote.toDto())
             }
             shareButton.setOnClickListener {
-                onShareListener(quote)
+                onShareListener(quote.toDto())
             }
 
             authorNameText.setOnClickListener {
-                onAuthorListener(quote)
+                onAuthorListener(quote.toDto())
             }
             linkText.setOnClickListener {
                 Intent().apply {
@@ -138,15 +160,4 @@ class QuoteViewHolder(
 
     }
 }
-
-class QuoteDiffCallback : DiffUtil.ItemCallback<Quote>() {
-    override fun areItemsTheSame(oldItem: Quote, newItem: Quote): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: Quote, newItem: Quote): Boolean {
-        return oldItem.likes == newItem.likes
-    }
-}
-
 

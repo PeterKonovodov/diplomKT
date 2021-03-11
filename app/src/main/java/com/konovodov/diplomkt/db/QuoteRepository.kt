@@ -2,12 +2,13 @@ package com.konovodov.diplomkt.db
 
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import com.konovodov.diplomkt.dto.Quote
 
 
 interface QuoteRepository {
-    fun getAll(): LiveData<List<Quote>>
-    fun getAllByAuthor(author: String): LiveData<List<Quote>>
+    fun getAllPaged(pageSize: Int): LiveData<PagedList<QuoteEntity>>
+    fun getAllByAuthorPaged(pageSize: Int, author: String): LiveData<PagedList<QuoteEntity>>
     fun likeById(id: Long)
     fun dislikeById(id: Long)
     fun shareQuote(quote: Quote)

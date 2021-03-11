@@ -6,67 +6,52 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.paging.PagedList
+import androidx.paging.toLiveData
 import com.konovodov.diplomkt.R
 import com.konovodov.diplomkt.dto.Quote
 import java.io.FileOutputStream
 import java.util.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import kotlin.collections.HashMap
 
 
 class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Context) :
     QuoteRepository {
 
-    lateinit var listFromDb: LiveData<List<QuoteEntity>>
-    lateinit var quotesList: LiveData<List<Quote>>
-
     val imagesCache = HashMap<Long, Drawable>()
 
-    override fun getAll(): LiveData<List<Quote>> {
-
-        if (dao.getSize() == 0) hardCodeData()
-
-        quotesList = Transformations.map(dao.getAll()) { list ->
-            list.map {
-                Quote(
-                    it.id,
-                    it.author,
-                    it.fromAuthor,
-                    it.published,
-                    it.content,
-                    it.link,
-                    it.likes,
-                    it.imagePath,
-                    imageDrawable = getImageById(it.id)
-                )
+    override fun getAllPaged(pageSize: Int): LiveData<PagedList<QuoteEntity>> {
+        val a = dao.getSize()
+        if ( a == 0) hardCodeData()
+        val b = dao.getAllPaged()
+        val c = dao.getAllPaged().toLiveData(pageSize  = pageSize, boundaryCallback = object: PagedList.BoundaryCallback<QuoteEntity>(){
+            override fun onZeroItemsLoaded() {
+                super.onZeroItemsLoaded()
             }
-        }
-        return quotesList
+
+            override fun onItemAtFrontLoaded(itemAtFront: QuoteEntity) {
+                super.onItemAtFrontLoaded(itemAtFront)
+            }
+
+            override fun onItemAtEndLoaded(itemAtEnd: QuoteEntity) {
+                super.onItemAtEndLoaded(itemAtEnd)
+            }
+        })
+        return c
     }
 
 
-    override fun getAllByAuthor(author: String) =
-        Transformations.map(dao.getByAuthor(author)) { list ->
-            list.map {
-                Quote(
-                    it.id,
-                    it.author,
-                    it.fromAuthor,
-                    it.published,
-                    it.content,
-                    it.link,
-                    it.likes,
-                    it.imagePath,
-                    imageDrawable = getImageById(it.id)
-                )
-            }
-        }
+    override fun getAllByAuthorPaged(pageSize: Int, author: String): LiveData<PagedList<QuoteEntity>> {
+        return dao.getAllByAuthorPaged(author).toLiveData(pageSize  = pageSize)
+    }
 
 
     override fun getImageById(id: Long): Drawable? {
-        if(imagesCache.contains(id)) return imagesCache[id]
+        if (imagesCache.contains(id)) return imagesCache[id]
         val quote = dao.getById(id)
-        if(quote.imagePath.isEmpty()) return null
+        if (quote.imagePath.isEmpty()) return null
         val drawable = BitmapDrawable.createFromPath(quote.imagePath)
         drawable?.let { imagesCache.put(id, it) }
         return drawable
