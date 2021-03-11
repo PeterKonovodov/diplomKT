@@ -1,13 +1,13 @@
 package com.konovodov.diplomkt.adapter
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.konovodov.diplomkt.R
 import com.konovodov.diplomkt.databinding.QuoteLayoutBinding
@@ -24,6 +24,7 @@ typealias OnDislikeListener = (quote: Quote) -> Unit
 typealias OnShareListener = (quote: Quote) -> Unit
 typealias OnAuthorListener = (quote: Quote) -> Unit
 typealias OnDeleteListener = (quote: Quote) -> Unit
+typealias OnLoadImage = (path: String) -> Drawable?
 
 
 class QuoteAdapter(
@@ -31,8 +32,10 @@ class QuoteAdapter(
     private val onDislikeListener: (quote: Quote) -> Unit,
     private val onShareListener: (quote: Quote) -> Unit,
     private val onAuthorListener: (quote: Quote) -> Unit,
-    private val onDeleteListener: (quote: Quote) -> Unit
-) : PagedListAdapter<QuoteEntity, QuoteViewHolder>(QUOTE_COMPARATOR) {
+    private val onDeleteListener: (quote: Quote) -> Unit,
+    private val onLoadImage: (path: String) -> Drawable?,
+
+    ) : PagedListAdapter<QuoteEntity, QuoteViewHolder>(QUOTE_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuoteViewHolder {
         val binding =
@@ -44,15 +47,15 @@ class QuoteAdapter(
             onDislikeListener,
             onShareListener,
             onAuthorListener,
-            onDeleteListener
+            onDeleteListener,
+            onLoadImage
         )
     }
 
 
-
     override fun onBindViewHolder(holder: QuoteViewHolder, position: Int) {
         val quote = getItem(position)
-        quote?.let{holder.bind(it)}
+        quote?.let { holder.bind(it) }
     }
 
     companion object {
@@ -71,7 +74,6 @@ class QuoteAdapter(
 }
 
 
-
 class QuoteViewHolder(
     private val parent: ViewGroup,
     private val binding: QuoteLayoutBinding,
@@ -80,8 +82,9 @@ class QuoteViewHolder(
     private val onShareListener: OnShareListener,
     private val onAuthorListener: OnAuthorListener,
     private val onDeleteListener: OnDeleteListener,
+    private val onLoadImage: OnLoadImage
 
-    ) : RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(quote: QuoteEntity) {
         binding.apply {
@@ -104,12 +107,10 @@ class QuoteViewHolder(
             } else linkText.visibility = View.GONE
 
 
-/*
-            quote.imageDrawable?.let {
+            if (quote.imagePath.isNotEmpty()) {
                 imageContent.visibility = View.VISIBLE
-                imageContent.setImageDrawable(it)
-            } ?: run { imageContent.visibility = View.GONE }
-*/
+                imageContent.setImageDrawable(onLoadImage(quote.imagePath))
+            } else imageContent.visibility = View.GONE
 
 
             if (quote.author == parent.resources.getString(R.string.user_name)) {

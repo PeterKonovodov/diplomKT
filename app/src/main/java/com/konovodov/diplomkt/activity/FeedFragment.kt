@@ -8,16 +8,11 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
-import androidx.paging.PagedList
 import com.konovodov.diplomkt.R
 import com.konovodov.diplomkt.adapter.QuoteAdapter
 import com.konovodov.diplomkt.databinding.FeedFragmentBinding
-import com.konovodov.diplomkt.db.QuoteEntity
-import com.konovodov.diplomkt.dto.Quote
 import com.konovodov.diplomkt.viewmodel.QuoteViewModel
-import kotlinx.android.synthetic.main.feed_fragment.*
 
 class FeedFragment : Fragment() {
 
@@ -47,13 +42,18 @@ class FeedFragment : Fragment() {
             },
             onDeleteListener = {
                 viewModel.deleteById(it.id)
+            },
+            onLoadImage = {
+                viewModel.loadImageByPath(it)
             }
 
         )
 
         binding.newsFeed.adapter = adapter
 
-        viewModel.quotesList.observe(viewLifecycleOwner, { quotesList -> adapter.submitList(quotesList) })
+        viewModel.quotesList.observe(
+            viewLifecycleOwner,
+            { quotesList -> adapter.submitList(quotesList) })
 
 
         binding.fab.setOnClickListener {

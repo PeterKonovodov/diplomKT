@@ -1,8 +1,6 @@
 package com.konovodov.diplomkt.db
 
-import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
-import androidx.paging.PagedList
 import androidx.room.*
 
 @Dao

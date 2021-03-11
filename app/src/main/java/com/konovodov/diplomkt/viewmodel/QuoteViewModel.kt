@@ -3,8 +3,6 @@ package com.konovodov.diplomkt.viewmodel
 import android.app.Application
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.paging.PagedList
 import com.konovodov.diplomkt.db.AppDatabase
 import com.konovodov.diplomkt.db.QuoteRepository
 import com.konovodov.diplomkt.db.QuoteRepositoryRoomImpl
@@ -26,10 +24,11 @@ class QuoteViewModel(application: Application) : AndroidViewModel(application) {
     fun dislikeById(id: Long) = repository.dislikeById(id)
     fun getById(id: Long): Quote = repository.getById(id)
     fun deleteById(id: Long) = repository.deleteById(id)
-    fun getImageById(id: Long) : Drawable? = repository.getImageById(id)
+    fun loadImageByPath(path: String) : Drawable? = repository.loadImageByPath(path)
+    fun saveImage(drawable: Drawable): String = repository.saveImage(drawable)
 
     companion object {
-        private const val PAGE_SIZE = 5
+        private const val PAGE_SIZE = 7
     }
 
 

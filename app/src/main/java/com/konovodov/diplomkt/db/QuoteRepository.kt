@@ -16,7 +16,8 @@ interface QuoteRepository {
     fun getById(id: Long): Quote
     fun deleteById(id: Long)
     fun getEmptyQuote(): Quote
-    fun getImageById(id: Long) : Drawable?
+    fun loadImageByPath(path: String) : Drawable?
+    fun saveImage(drawable: Drawable) : String
 }
 
 

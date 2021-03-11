@@ -25,12 +25,14 @@ import java.io.IOException
 
 class NewQuoteFragment : Fragment() {
 
-    private val GALLERYREQUEST = 1
+    companion object {
+        private const val GALLERY_REQUEST = 1
+    }
 
-    val viewModel: QuoteViewModel by viewModels(ownerProducer = ::requireParentFragment)
-    lateinit var quote: Quote
-    lateinit var binding: NewQuoteFragmentBinding
-    var selectedImageUri: Uri? = null
+    private val viewModel: QuoteViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private lateinit var quote: Quote
+    private lateinit var binding: NewQuoteFragmentBinding
+    private var selectedImageUri: Uri? = null
 
 
     override fun onCreateView(
@@ -47,8 +49,7 @@ class NewQuoteFragment : Fragment() {
 
         with(binding) {
 
-            arguments?.let {
-                val data = it
+            arguments?.let { data ->
                 quote = viewModel.getById(data.getLong("id", 0))
 
                 selectedImageUri?.let {
@@ -56,48 +57,43 @@ class NewQuoteFragment : Fragment() {
                     contentImage.setImageDrawable(BitmapDrawable(bitmap))
                 }
 
-                //исправить эту проверку
-                it.getString("author")?.let {
+                authorTextEdit.text = context?.resources?.getString(R.string.user_name)
 
-                    authorTextEdit.text = context?.resources?.getString(R.string.user_name)
+                data.getString("content")?.let { content ->
+                    contentEdit.setText(content)
 
-                    data.getString("content")?.let { content ->
-                        contentEdit.setText(content)
+                    contentImage.setOnClickListener {
 
-                        contentImage.setOnClickListener {
-
-                            val photoPickerIntent = Intent().apply {
-                                action = Intent.ACTION_GET_CONTENT
-                                type = "image/*"
-                            }
-
-                            if (activity?.packageManager?.let { it1 ->
-                                    photoPickerIntent.resolveActivity(it1)
-                                } != null) startActivityForResult(
-                                photoPickerIntent,
-                                GALLERYREQUEST
-                            )
+                        val photoPickerIntent = Intent().apply {
+                            action = Intent.ACTION_GET_CONTENT
+                            type = "image/*"
                         }
 
-                        cancelButton.setOnClickListener {
+                        if (activity?.packageManager?.let { it1 ->
+                                photoPickerIntent.resolveActivity(it1)
+                            } != null) startActivityForResult(
+                            photoPickerIntent,
+                            GALLERY_REQUEST
+                        )
+                    }
+
+                    cancelButton.setOnClickListener {
+                        AndroidUtils.hideKeyboard(requireView())
+                        findNavController().popBackStack()
+                    }
+                    saveButton.setOnClickListener {
+                        if (contentEdit.text.isNotEmpty()) {
+                            quote = quote.copy(
+                                author = authorTextEdit.text.toString(),
+                                content = contentEdit.text.toString(),
+                                link = linkEdit.text.toString()
+                            )
+                            viewModel.saveQuote(quote)
                             AndroidUtils.hideKeyboard(requireView())
                             findNavController().popBackStack()
                         }
-                        saveButton.setOnClickListener {
-                            if (contentEdit.text.isNotEmpty()) {
-                                quote = quote.copy(
-                                    author = authorTextEdit.text.toString(),
-                                    content = contentEdit.text.toString(),
-                                    link = linkEdit.text.toString()
-                                )
-                                viewModel.saveQuote(quote)
-                                AndroidUtils.hideKeyboard(requireView())
-                                findNavController().popBackStack()
-                            }
-                        }
                     }
                 }
-
             }
         }
 
@@ -114,7 +110,7 @@ class NewQuoteFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, returnedIntent: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                GALLERYREQUEST -> run {
+                GALLERY_REQUEST -> run {
                     val imageUri = returnedIntent?.data
                     try {
                         imageUri?.let {
@@ -125,13 +121,13 @@ class NewQuoteFragment : Fragment() {
                                 )
                                 val drawable = BitmapDrawable(activity?.resources, bm)
                                 contentImage.setImageDrawable(drawable)
-                                quote.copy(imageDrawable = drawable)
+                                quote.copy(imagePath = viewModel.saveImage(drawable))
                             } else {
                                 val source =
                                     ImageDecoder.createSource(activity?.contentResolver!!, imageUri)
                                 val drawable = ImageDecoder.decodeDrawable(source)
                                 contentImage.setImageDrawable(drawable)
-                                quote.copy(imageDrawable = drawable)
+                                quote.copy(imagePath = viewModel.saveImage(drawable))
                             }
                         }
                     } catch (e: IOException) {

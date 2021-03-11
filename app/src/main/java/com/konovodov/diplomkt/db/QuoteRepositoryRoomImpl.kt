@@ -12,48 +12,47 @@ import com.konovodov.diplomkt.R
 import com.konovodov.diplomkt.dto.Quote
 import java.io.FileOutputStream
 import java.util.*
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 import kotlin.collections.HashMap
 
 
 class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Context) :
     QuoteRepository {
 
-    val imagesCache = HashMap<Long, Drawable>()
+    private val imagesCache = HashMap<String, Drawable>()
 
     override fun getAllPaged(pageSize: Int): LiveData<PagedList<QuoteEntity>> {
-        val a = dao.getSize()
-        if ( a == 0) hardCodeData()
-        val b = dao.getAllPaged()
-        val c = dao.getAllPaged().toLiveData(pageSize  = pageSize, boundaryCallback = object: PagedList.BoundaryCallback<QuoteEntity>(){
-            override fun onZeroItemsLoaded() {
-                super.onZeroItemsLoaded()
-            }
+        if (dao.getSize() == 0) hardCodeData()
+        val c = dao.getAllPaged().toLiveData(
+            pageSize = pageSize,
+            boundaryCallback = object : PagedList.BoundaryCallback<QuoteEntity>() {
+                override fun onZeroItemsLoaded() {
+                    super.onZeroItemsLoaded()
+                }
 
-            override fun onItemAtFrontLoaded(itemAtFront: QuoteEntity) {
-                super.onItemAtFrontLoaded(itemAtFront)
-            }
+                override fun onItemAtFrontLoaded(itemAtFront: QuoteEntity) {
+                    super.onItemAtFrontLoaded(itemAtFront)
+                }
 
-            override fun onItemAtEndLoaded(itemAtEnd: QuoteEntity) {
-                super.onItemAtEndLoaded(itemAtEnd)
-            }
-        })
+                override fun onItemAtEndLoaded(itemAtEnd: QuoteEntity) {
+                    super.onItemAtEndLoaded(itemAtEnd)
+                }
+            })
         return c
     }
 
-
-    override fun getAllByAuthorPaged(pageSize: Int, author: String): LiveData<PagedList<QuoteEntity>> {
-        return dao.getAllByAuthorPaged(author).toLiveData(pageSize  = pageSize)
+    override fun getAllByAuthorPaged(
+        pageSize: Int,
+        author: String
+    ): LiveData<PagedList<QuoteEntity>> {
+        return dao.getAllByAuthorPaged(author).toLiveData(pageSize = pageSize)
     }
 
 
-    override fun getImageById(id: Long): Drawable? {
-        if (imagesCache.contains(id)) return imagesCache[id]
-        val quote = dao.getById(id)
-        if (quote.imagePath.isEmpty()) return null
-        val drawable = BitmapDrawable.createFromPath(quote.imagePath)
-        drawable?.let { imagesCache.put(id, it) }
+    override fun loadImageByPath(path: String): Drawable? {
+        if (path.isEmpty()) return null
+        if (imagesCache.contains(path)) return imagesCache[path]
+        val drawable = BitmapDrawable.createFromPath(path)
+        drawable?.let { imagesCache.put(path, it) }
         return drawable
     }
 
@@ -91,21 +90,16 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
     }
 
     override fun saveQuote(quote: Quote) {
-        if (quote.imagePath.isEmpty() && quote.imageDrawable != null) {
-            dao.save(
-                QuoteEntity.fromDto(
-                    quote.copy(imagePath = makeImagePathFromDrawable(quote.imageDrawable))
-                )
-            )
-            return
-        }
         dao.save(QuoteEntity.fromDto(quote))
     }
 
 
-    private fun makeImagePathFromDrawable(drawable: Drawable): String {
-        val fileName = drawable.hashCode().toString() + ".png"
-        val bm = (drawable as BitmapDrawable).bitmap
+
+    private fun Drawable?.toFile(): String {
+        if(this == null) return ""
+
+        val fileName = this.hashCode().toString() + ".png"
+        val bm = (this as BitmapDrawable).bitmap
 
         val file = context.filesDir.resolve(fileName)
         if (!file.exists()) {
@@ -117,6 +111,10 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
         return file.absolutePath
     }
 
+    override fun saveImage(drawable: Drawable): String {
+        return drawable.toFile()
+    }
+
 
     override fun getById(id: Long): Quote {
         if (id == 0L) return getEmptyQuote()
@@ -126,7 +124,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
     override fun getEmptyQuote(): Quote = Quote()
 
 
-    fun hardCodeData() {
+    private fun hardCodeData() {
         val random = Random(1)
 
         saveQuote(
@@ -135,17 +133,16 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Давайте смотреть реально. Комедия — мёртвый жанр, а трагедия — это смешно!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.bender1)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.bender1).toFile()
             )
         )
-//        saveQuote(Quote(author = "Бендер", content = "Давайте смотреть реально. Комедия — мёртвый жанр, а трагедия — это смешно!", likes = random.nextInt(100) - 5, published = 1614766259 - random.nextInt(10000).toLong() - random.nextInt(10000).toLong()))
         saveQuote(
             Quote(
                 author = "Бендер",
                 content = "Знаешь, что меня подбадривает? Издевательство над чужими неудачами.",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.bender2)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.bender2).toFile()
             )
         )
         saveQuote(
@@ -154,7 +151,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "На помощь! На помощь! Я слишком ленив, чтобы спасаться!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.bender3)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.bender3).toFile()
             )
         )
         saveQuote(
@@ -163,7 +160,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Не бейте меня!.. Я предам кого угодно!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.bender1)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.bender1).toFile()
             )
         )
         saveQuote(
@@ -172,7 +169,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Не люблю тусоваться! Просто у меня шило в жопе, которого я не просил!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.bender2),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.bender2).toFile(),
                 link = "https://ru.wikipedia.org/wiki/Шило"
             )
         )
@@ -182,7 +179,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Позёры! Я ненавидел Макаревича ещё до того, как это стало модным.",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.bender3)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.bender3).toFile()
             )
         )
         saveQuote(
@@ -191,7 +188,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Ура! Я богат! И ты тоже… Но это почему-то не радует.",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.bender1)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.bender1).toFile()
             )
         )
         saveQuote(
@@ -200,7 +197,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Интересно. Нет, не то слово. Скучно.",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.bender2)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.bender2).toFile()
             )
         )
         saveQuote(
@@ -209,7 +206,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "У меня будет свой луна-парк… С блэкджеком и шлюхами! А хотя к чёрту луна-парк!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.bender3)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.bender3).toFile()
             )
         )
         saveQuote(
@@ -218,7 +215,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "В шахматах нельзя показывать противнику свои козыри.",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.bender1)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.bender1).toFile()
             )
         )
         saveQuote(
@@ -227,7 +224,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Уф! Какой мне страшный сон приснился! Больше никогда не буду спать!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.fry1)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.fry1).toFile()
             )
         )
         saveQuote(
@@ -236,7 +233,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Санта, ты спас мне жизнь. Не убивай меня.",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.fry2)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.fry2).toFile()
             )
         )
         saveQuote(
@@ -245,7 +242,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Класс! Будущее! Моя семья, коллеги, моя девушка… я их больше никогда не увижу… Ура!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.fry3)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.fry3).toFile()
             )
         )
         saveQuote(
@@ -254,7 +251,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "День святого валентина? о, черт…я опять забыл завести девушку.",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.fry1)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.fry1).toFile()
             )
         )
         saveQuote(
@@ -263,7 +260,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Почему в кепке йогурт? Я могу все объяснить. Он раньше был молоком, но понимаете — время калечит всех…",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.fry2)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.fry2).toFile()
             )
         )
         saveQuote(
@@ -272,7 +269,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Я всегда боялся, что он вот так вот убежит. Почему?! Почему… я не сломал ему ноги?!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.farnsworth)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.farnsworth).toFile()
             )
         )
         saveQuote(
@@ -281,7 +278,8 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Хорошие новости, народ: по телевизору показывают плохие новости!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.farnsworth2),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.farnsworth2)
+                    .toFile(),
                 link = "https://yandex.ru/news/"
             )
         )
@@ -291,7 +289,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Бог мой, надо что-то предпринять… но я уже в пижаме.",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.farnsworth)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.farnsworth).toFile()
             )
         )
         saveQuote(
@@ -300,7 +298,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Да это же обычная вода… Обычная вода с небольшой примесью ЛСД.",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.farnsworth2)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.farnsworth2).toFile()
             )
         )
         saveQuote(
@@ -309,7 +307,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Пока я командую, любая миссия - суицидальная!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.brannigan)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.brannigan).toFile()
             )
         )
         saveQuote(
@@ -318,7 +316,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Гравитация, ты снова победила!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.brannigan)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.brannigan).toFile()
             )
         )
         saveQuote(
@@ -327,7 +325,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Я получил ваш вызов о помощи и прибыл, как только захотел!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.brannigan)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.brannigan).toFile()
             )
         )
         saveQuote(
@@ -336,7 +334,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Как много интересного вы говорите! Как жаль, что это меня мало интересует.",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.homer1)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
             )
         )
         saveQuote(
@@ -345,7 +343,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Для вранья нужны двое. Один врет, другой слушает.",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.homer2)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer2).toFile()
             )
         )
         saveQuote(
@@ -354,7 +352,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "О, Боже! Космические пришельцы! Не ешьте меня. У меня жена, дети. Съешьте их!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.homer1)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
             )
         )
         saveQuote(
@@ -363,7 +361,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Вообще-то я не религиозный человек, но если ты есть там наверху, спаси меня, Супермен!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.homer2)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer2).toFile()
             )
         )
         saveQuote(
@@ -372,9 +370,10 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 content = "Ты поможешь мне, а я за это приму помощь от тебя!",
                 likes = random.nextInt(100) - 5,
                 published = 1614766259 - random.nextInt(10000).toLong(),
-                imageDrawable = AppCompatResources.getDrawable(context, R.drawable.homer1)
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
             )
         )
     }
 
 }
+

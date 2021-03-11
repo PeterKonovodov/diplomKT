@@ -1,6 +1,5 @@
 package com.konovodov.diplomkt.dto
 
-import android.graphics.drawable.Drawable
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
@@ -12,6 +11,5 @@ data class Quote(
         val content: String = "",
         val link: String = "",
         val likes: Int = 0,
-        val imagePath: String = "",
-        val imageDrawable: Drawable? = null
+        val imagePath: String = ""
 )

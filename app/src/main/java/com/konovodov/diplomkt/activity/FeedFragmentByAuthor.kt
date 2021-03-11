@@ -14,14 +14,13 @@ import com.konovodov.diplomkt.viewmodel.QuoteViewModel
 
 class FeedFragmentByAuthor : Fragment() {
 
-    val viewModel: QuoteViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private val viewModel: QuoteViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        val binding = FeedFragmentBinding.inflate(inflater, container, false)
         val binding = FeedFragmentByAuthorBinding.inflate(inflater, container, false)
 
         val adapter = QuoteAdapter(
@@ -31,6 +30,9 @@ class FeedFragmentByAuthor : Fragment() {
             onAuthorListener = {},
             onDeleteListener = {
                 viewModel.deleteById(it.id)
+            },
+            onLoadImage = {
+                viewModel.loadImageByPath(it)
             }
 
         )
