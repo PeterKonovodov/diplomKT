@@ -5,13 +5,18 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.lifecycle.LiveData
+import androidx.paging.Config
+import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.paging.toLiveData
 import com.konovodov.diplomkt.R
 import com.konovodov.diplomkt.dto.Quote
 import java.io.FileOutputStream
 import java.util.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import kotlin.collections.HashMap
 
 
@@ -22,22 +27,39 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
 
     override fun getAllPaged(pageSize: Int): LiveData<PagedList<QuoteEntity>> {
         if (dao.getSize() == 0) hardCodeData()
-        val c = dao.getAllPaged().toLiveData(
-            pageSize = pageSize,
-            boundaryCallback = object : PagedList.BoundaryCallback<QuoteEntity>() {
+
+        val executor: ExecutorService = Executors.newSingleThreadExecutor()
+
+        val config = PagedList.Config.Builder()
+            .setPageSize(pageSize)
+            .setPrefetchDistance(pageSize)
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(pageSize*2)
+            .setMaxSize(PagedList.Config.MAX_SIZE_UNBOUNDED)
+            .build()
+
+
+        val livePagedList = LivePagedListBuilder(dao.getAllPaged(), config)
+            .setInitialLoadKey(null)
+            .setBoundaryCallback(object : PagedList.BoundaryCallback<QuoteEntity>() {
                 override fun onZeroItemsLoaded() {
                     super.onZeroItemsLoaded()
+                    val breakpointhelper = 0
                 }
 
                 override fun onItemAtFrontLoaded(itemAtFront: QuoteEntity) {
                     super.onItemAtFrontLoaded(itemAtFront)
+                    val breakpointhelper = 0
                 }
 
                 override fun onItemAtEndLoaded(itemAtEnd: QuoteEntity) {
                     super.onItemAtEndLoaded(itemAtEnd)
+                    val breakpointhelper = 0
                 }
             })
-        return c
+            .setFetchExecutor(executor)
+            .build()
+        return livePagedList
     }
 
     override fun getAllByAuthorPaged(
@@ -66,7 +88,7 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
 
     override fun deleteById(id: Long) {
         dao.deleteById(id)
-        imagesCache.remove(id)
+//        imagesCache.remove(id)
     }
 
     override fun shareQuote(quote: Quote) {
@@ -373,6 +395,3256 @@ class QuoteRepositoryRoomImpl(private val dao: QuoteDao, private val context: Co
                 imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
             )
         )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+        saveQuote(
+            Quote(
+                author = "Гомер Симпсон",
+                content = "Ты поможешь мне, а я за это приму помощь от тебя!",
+                likes = random.nextInt(100) - 5,
+                published = 1614766259 - random.nextInt(10000).toLong(),
+                imagePath = AppCompatResources.getDrawable(context, R.drawable.homer1).toFile()
+            )
+        )
+
     }
 
 }

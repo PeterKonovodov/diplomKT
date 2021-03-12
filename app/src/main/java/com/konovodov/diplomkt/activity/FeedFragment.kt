@@ -51,9 +51,11 @@ class FeedFragment : Fragment() {
 
         binding.newsFeed.adapter = adapter
 
-        viewModel.quotesList.observe(
+        viewModel.allQuotesPaged.observe(
             viewLifecycleOwner,
-            { quotesList -> adapter.submitList(quotesList) })
+            {
+                    quotesList -> adapter.submitList(quotesList)
+            })
 
 
         binding.fab.setOnClickListener {

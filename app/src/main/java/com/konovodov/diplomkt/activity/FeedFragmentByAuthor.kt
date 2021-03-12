@@ -39,8 +39,10 @@ class FeedFragmentByAuthor : Fragment() {
 
         binding.newsFeed.adapter = adapter
         arguments?.let {
-            viewModel.getAllByAuthorPaged(it.get("author") as String)
-                .observe(viewLifecycleOwner, { quotesList -> adapter.submitList(quotesList) })
+            viewModel.allQuotesByAuthorPaged(it.get("author") as String)
+                .observe(viewLifecycleOwner, {
+                        quotesList -> adapter.submitList(quotesList)
+                })
         }
 
         binding.fab.setOnClickListener {
